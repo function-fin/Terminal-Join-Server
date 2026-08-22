@@ -1,2 +1,2 @@
-# Terminal-Join-Server-
+# Terminal-Join-Server
 JOIN SERVER game
