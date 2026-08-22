@@ -1,2 +1,2 @@
-# Terminal-Join-Server-SpwnCub-
+# Terminal-Join-Server-
 JOIN SERVER game
