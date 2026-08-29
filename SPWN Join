@@ -19,6 +19,7 @@ local function Create(className, parent, properties, corner, stroke)
     end
     if stroke then
         local str = Instance.new("UIStroke", obj)
+        str.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
         for k, v in pairs(stroke) do str[k] = v end
     end
     if parent then obj.Parent = parent end
@@ -256,7 +257,7 @@ local JoinLinkBtn = Create("TextButton", MiniPopUp, {
     TextColor3 = Color3.fromRGB(255, 255, 255), 
     TextSize = 13, 
     ZIndex = 32
-}, nil, { Color = Color3.fromRGB(80, 80, 80), Thickness = 1 })
+}, nil, { Color = Color3.fromRGB(255, 255, 255), Thickness = 1 })
 
 function CreateServerSlot(server, index)
     local isCurrentServer = (server.id == game.JobId)
@@ -332,7 +333,7 @@ function CreateServerSlot(server, index)
         TextColor3 = Color3.fromRGB(255, 255, 255), 
         TextSize = 12, 
         ZIndex = 6
-    }, nil, { Color = Color3.fromRGB(150, 150, 150), Thickness = 1 })
+    }, nil, { Color = Color3.fromRGB(255, 255, 255), Thickness = 1 })
 
     JoinButton.MouseButton1Click:Connect(function()
         pcall(function()
@@ -350,7 +351,7 @@ function CreateServerSlot(server, index)
         TextColor3 = Color3.fromRGB(255, 255, 255), 
         TextSize = 11, 
         ZIndex = 6
-    }, nil, { Color = Color3.fromRGB(150, 150, 150), Thickness = 1 })
+    }, nil, { Color = Color3.fromRGB(255, 255, 255), Thickness = 1 })
 
     CopyButton.MouseButton1Click:Connect(function()
         if Clipboard and serverId and serverId ~= "N/A" then
