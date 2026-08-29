@@ -99,7 +99,7 @@ Create("TextLabel", TitleBar, {
     Position = UDim2.new(0, 58, 0, 0), 
     BackgroundTransparency = 1,
     Font = Enum.Font.Arcade, 
-    Text = "JOIN SPWNCUB", 
+    Text = "JOIN SPWN X FINDER DELUXE", 
     TextColor3 = Color3.fromRGB(255, 255, 255),
     TextSize = 16, 
     ZIndex = 10
