@@ -37,8 +37,14 @@ local ScreenGui = Create("ScreenGui", lp.PlayerGui, {
     ResetOnSpawn = false 
 })
 
+-- [SPWN] Atributos de identificação persistente
+ScreenGui:SetAttribute("SPWN_ManagedScriptID", "FinderDeluxeScript")
+ScreenGui:SetAttribute("SPWN_ManagedScriptName", "Join SPWN X Finder")
+ScreenGui:SetAttribute("SPWN_ManagedScriptCategory", "Join SPWN X Finder")
+
+-- [SPWN] Botão externo renomeado para OpenToggleButton (o Manager atua nele)
 local OpenBtn = Create("ImageButton", ScreenGui, {
-    Name = "ExternalToggleButton",
+    Name = "OpenToggleButton",
     Size = UDim2.new(0, 65, 0, 65),
     Position = UDim2.new(0, 10, 0.4, 0),
     BackgroundTransparency = 1,
@@ -559,3 +565,52 @@ UIS.InputBegan:Connect(function(input, gameProcessed)
 end)
 
 RefreshServers()
+
+--------------------------------------------------
+-- [SPWN] ADAPTADOR PERSISTENTE
+--------------------------------------------------
+task.spawn(function()
+    local scriptId = "FinderDeluxeScript"
+    local scriptConfig = {
+        Name = "Join SPWN X Finder",
+        Category = "Join SPWN X Finder",
+        GuiObject = ScreenGui,
+        OnDestroy = function()
+            -- [SPWN] Equivalente ao CloseButton original: destrói a GUI.
+            -- Não há loops/conexões persistentes que precisem de limpeza extra:
+            -- todos os handlers são filhos da ScreenGui e morrem com ela.
+            pcall(function() ScreenGui:Destroy() end)
+        end
+    }
+
+    -- Garante a persistência global na memória
+    _G.ScriptManagerQueue = _G.ScriptManagerQueue or {}
+    _G.RegisteredScriptDatabase = _G.RegisteredScriptDatabase or {}
+
+    -- [SPWN] Lê visibilidade persistida em vez de hardcoded true
+    local persistedVis = ScreenGui:GetAttribute("SPWN_ManagedVisibility")
+
+    _G.RegisteredScriptDatabase[scriptId] = {
+        Name = scriptConfig.Name,
+        Category = scriptConfig.Category,
+        GuiObject = scriptConfig.GuiObject,
+        IsVisible = (persistedVis == nil) and true or persistedVis,
+        OnDestroy = scriptConfig.OnDestroy
+    }
+
+    local exists = false
+    for _, item in ipairs(_G.ScriptManagerQueue) do
+        if item.id == scriptId then
+            exists = true
+            item.config = scriptConfig
+            break
+        end
+    end
+    if not exists then
+        table.insert(_G.ScriptManagerQueue, {id = scriptId, config = scriptConfig})
+    end
+
+    if _G.ScriptManager and type(_G.ScriptManager.RegisterScript) == "function" then
+        _G.ScriptManager.RegisterScript(scriptId, scriptConfig)
+    end
+end)
